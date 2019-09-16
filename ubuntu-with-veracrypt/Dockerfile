@@ -3,7 +3,7 @@ FROM            ubuntu_for_man_ppa:latest
 MAINTAINER      Lars Erdmann <lars.erdmann@uni-greifswald.de>
 
 COPY            veracrypt-ppa /etc/apt/sources.list.d/unit193-ubuntu-encryption-bionic.list
-COPY            root /var/spool/incron/
+COPY            incron-command /var/spool/incron/
 COPY            initial_setup.sh /
 COPY            executeJob.sh /
 
