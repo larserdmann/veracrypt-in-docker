@@ -87,7 +87,7 @@ Log into veracrypt container (docker exec) and start the incron scheduler
 service incron start
 ```
 
-### Possible algorithm to check
+### Possible algorithm to use
 Algorithm | Key Size (Bits) |	Block Size (Bits) | Mode of Operation
 ---|---|---|--- 	 	 	 	 
 AES | 256 | 128 | XTS
