@@ -1,7 +1,10 @@
 # veracrypt-in-docker
+
 Docker container for automated encryption
 
+
 ## Docker Images
+
 1. Builds an image in which you can add ppa's manually by providing the ppa key. (`ubuntu-for-manual-ppa`)
     ```
     docker build -t ubuntu_for_man_ppa .
@@ -16,9 +19,13 @@ Docker container for automated encryption
     ```
     docker image ls
     ```
+
     
 ## Docker Container
+
 Create container of `guiless-veracrypt` image with existing volume `transfer_files`:
+Note: container uses /dev/fuse of host to enable mounting of veracrypt container
+
 ```
 docker run -d -t -i \
 	--device /dev/fuse \
@@ -41,14 +48,16 @@ docker logs veracrypt
 
 or log into the veracrypt container with:
 ```
-docker exec -it veracrypt bash
+docker exec -it veracrypt bashdocker exec -it veracrypt bash
 ```
 
 ### problem: fuse + docker -> need privileged mode
+
 without `--privileged` veracrypt mounting would produces following error:
 Error: Failed to set up a loop device
 
 ## Start of encryption jobs, inputfile for incron
+
 Name of the job-file is irrelevant, the file-content not: 
 
 
@@ -60,6 +69,7 @@ a specific folder `encryption/data/[NameForVeracryptContainer]` are taken into a
 Also all files and subfolders are copied from there to the veracrypt container.
 
 CAUTION: do not use same file-/foldername in general and specific folder!  
+
 
 ## Configure Incron inside veracrypt container
 
@@ -75,19 +85,15 @@ Incron can only watch a path once. If there is a need for different workflows,
 the called script have to handle that.
 
 Check, if all is ok with:
-```
+
+```bash
 incrontab -l
 ```
 if there is a event wrong, it is replaced with '0'
 
-## Run Incron inside veracrypt container
-
-Log into veracrypt container (docker exec) and start the incron scheduler
-```
-service incron start
-```
 
 ### Possible algorithm to use
+
 Algorithm | Key Size (Bits) |	Block Size (Bits) | Mode of Operation
 ---|---|---|--- 	 	 	 	 
 AES | 256 | 128 | XTS

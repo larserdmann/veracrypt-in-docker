@@ -24,7 +24,7 @@ createOrOverwriteVeracryptContainer() {
         --filesystem=FAT \
         --pim=0 \
         -k "" \
-        --pw="${PW}" \
+        --password="${PW}" \
         --non-interactive
 }
 
@@ -36,7 +36,7 @@ mountVeracryptContainer() {
         --pim=0 \
         -k "" \
         -m=nokernelcrypto \
-        --pw="$PW" \
+        --password="$PW" \
         --non-interactive \
         "volumes/${NAME}.vc" \
         "open-volumes/${NAME}"
