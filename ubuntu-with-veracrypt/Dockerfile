@@ -4,7 +4,7 @@ MAINTAINER      Lars Erdmann <lars.erdmann@uni-greifswald.de>
 
 COPY            veracrypt-ppa /etc/apt/sources.list.d/unit193-ubuntu-encryption-bionic.list
 COPY            incron-command /var/spool/incron/
-COPY            initial_setup.sh /
+COPY            run.sh /
 COPY            executeJob.sh /
 
 RUN             apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 03647209B58A653A && \
@@ -18,6 +18,7 @@ RUN             apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0364720
                 groupadd -r veracrypt -g 433 && \
                 useradd -u 431 -r -g veracrypt -s /bin/false -c "VeraCrypt user" veracrypt && \
                 chmod +x /executeJob.sh && \
-                chmod +x /initial_setup.sh
+                chmod +x /run.sh && \
+                mv /var/spool/incron/incron-command /var/spool/incron/root
 
-ENTRYPOINT      ["/bin/bash"]
+ENTRYPOINT      ["./run.sh"]

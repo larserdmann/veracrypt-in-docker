@@ -81,7 +81,7 @@ cropLog() {
 ###
 # Main
 ###
-toLogger "execute job: $1"
+toLogger "---> execute job: $1 as $(whoami)"
 
 if [ -f "/upload/encryption/job-new/$1" ]
 then

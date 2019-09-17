@@ -32,3 +32,5 @@ cd "$APP_FOLDER"
 chown -R veracrypt .
 
 service incron start
+
+tail -f $APP_FOLDER/log
