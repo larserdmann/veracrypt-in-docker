@@ -1,5 +1,3 @@
-#!/bin/bash
-
 calculateNeededSizeForVeracryptContainer() {
     NAME=$1
 
@@ -8,38 +6,6 @@ calculateNeededSizeForVeracryptContainer() {
     SIZE_OF_ALL=$(($SIZE_OF_GENERAL_FOLDER+$SIZE_OF_SPECIFIC_FOLDER+1))
 
     return "$SIZE_OF_ALL"
-}
-
-createOrOverwriteVeracryptContainer() {
-    NAME=$1
-    PW=$2
-    SIZE=$3
-
-    veracrypt -t \
-        --create "volumes/${NAME}.vc" \
-        --size="${SIZE}M" \
-        --volume-type=normal \
-        --encryption=$USED_ENCRYPTION_MODE \
-        --hash=sha-512 \
-        --filesystem=FAT \
-        --pim=0 \
-        -k "" \
-        --password="${PW}" \
-        --non-interactive
-}
-
-mountVeracryptContainer() {
-    NAME=$1
-    PW=$2
-
-    veracrypt -t \
-        --pim=0 \
-        -k "" \
-        -m=nokernelcrypto \
-        --password="$PW" \
-        --non-interactive \
-        "volumes/${NAME}.vc" \
-        "open-volumes/${NAME}"
 }
 
 copyFilesInVeracryptContainer() {
@@ -81,6 +47,7 @@ cropLog() {
 ###
 # Main
 ###
+
 toLogger "---> execute job: $1 as $(whoami)"
 
 if [ -f "/upload/encryption/job-new/$1" ]
@@ -106,7 +73,19 @@ then
         toLogger "needed container size: $CALCULATED_SIZE MB ($key)"
 
         toLogger "start container creation ($key) ..."
-        createOrOverwriteVeracryptContainer "$key" "$pw" "$CALCULATED_SIZE"
+
+    veracrypt -t \
+        --create "volumes/${key}.vc" \
+        --size="${CALCULATED_SIZE}M" \
+        --volume-type=normal \
+        --encryption=AES \
+        --hash=sha-512 \
+        --filesystem=FAT \
+        --pim=0 \
+        -k "" \
+        --password="${pw}" \
+        --non-interactive
+
 
         if [ ! -f "/upload/encryption/volumes/${key}.vc" ]
         then
@@ -117,7 +96,15 @@ then
             mkdir "open-volumes/${key}"
 
             toLogger "start mounting ${key}.vc ..."
-            mountVeracryptContainer "$key" "$pw"
+
+    veracrypt -t \
+        --pim=0 \
+        -k "" \
+        -m=nokernelcrypto \
+        --password="$pw" \
+        --non-interactive \
+        "volumes/${key}.vc" \
+        "open-volumes/${key}"
 
             if [ ! -d "/upload/encryption/open-volumes/$key" ]
             then
