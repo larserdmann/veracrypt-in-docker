@@ -52,21 +52,19 @@ toLogger "---> execute job: $1 as $(whoami)"
 
 if [ -f "/upload/encryption/job-new/$1" ]
 then
-    cd /upload/encryption/job-new
-    read key pw < $1
-    echo "${key}" > $1
+    cd /upload/encryption/
+    mv "job-new/$1" "job-in-progress/"
 
-    toLogger "key: ${key}"
+    read key pw < "job-in-progress/$1"
 
-    cd /upload/encryption
+    toLogger "found key: ${key}"
+
     if [ ! -d "data/${key}" ]
     then
-        mv "job-new/$1" "job-failed"
+        mv "job-in-progress/$1" "job-failed"
         toLogger "No data for: ${key}, cancel job"
 
      else
-        mv "job-new/$1" "job-in-progress/"
-
         calculateNeededSizeForVeracryptContainer "$key"
         CALCULATED_SIZE=$?
 
@@ -74,18 +72,17 @@ then
 
         toLogger "start container creation ($key) ..."
 
-    veracrypt -t \
-        --create "volumes/${key}.vc" \
-        --size="${CALCULATED_SIZE}M" \
-        --volume-type=normal \
-        --encryption=AES \
-        --hash=sha-512 \
-        --filesystem=FAT \
-        --pim=0 \
-        -k "" \
-        --password="${pw}" \
-        --non-interactive
-
+        veracrypt -t \
+            --create "volumes/${key}.vc" \
+            --size="${CALCULATED_SIZE}M" \
+            --volume-type=normal \
+            --encryption=AES \
+            --hash=sha-512 \
+            --filesystem=FAT \
+            --pim=0 \
+            -k "" \
+            --password="${pw}" \
+            --non-interactive
 
         if [ ! -f "/upload/encryption/volumes/${key}.vc" ]
         then
@@ -97,14 +94,14 @@ then
 
             toLogger "start mounting ${key}.vc ..."
 
-    veracrypt -t \
-        --pim=0 \
-        -k "" \
-        -m=nokernelcrypto \
-        --password="$pw" \
-        --non-interactive \
-        "volumes/${key}.vc" \
-        "open-volumes/${key}"
+            veracrypt -t \
+                --pim=0 \
+                -k "" \
+                -m=nokernelcrypto \
+                --password="$pw" \
+                --non-interactive \
+                "volumes/${key}.vc" \
+                "open-volumes/${key}"
 
             if [ ! -d "/upload/encryption/open-volumes/$key" ]
             then
