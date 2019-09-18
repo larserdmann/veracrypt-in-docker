@@ -27,6 +27,10 @@ mkdir "${APP_FOLDER}/data/for-all"
 # log file
 touch "${APP_FOLDER}/log"
 
+# clean up past job files
+mv $APP_FOLDER/job-in-progress/*.* ${APP_FOLDER}/job-failed/
+mv $APP_FOLDER/job-new/*.* ${APP_FOLDER}/job-failed/
+
 # write rights for veracrypt user
 cd "$APP_FOLDER"
 chown -R veracrypt .
