@@ -8,6 +8,13 @@ calculateNeededSizeForVeracryptContainer() {
     return "$SIZE_OF_ALL"
 }
 
+checkAvailableSize() {
+
+    SIZE_OF_VOLUME=$(df -m  --output=avail /upload | sed -n 2p)
+
+    return "$SIZE_OF_VOLUME"
+}
+
 copyFilesInVeracryptContainer() {
     NAME=$1
 
@@ -68,54 +75,64 @@ then
         calculateNeededSizeForVeracryptContainer "$key"
         CALCULATED_SIZE=$?
 
-        toLogger "needed container size: $CALCULATED_SIZE MB ($key)"
+        checkAvailableSize
+        AVAILABLE_SIZE=$?
 
-        toLogger "start container creation ($key) ..."
+        toLogger "needed container size for $key: $CALCULATED_SIZE MB / $AVAILABLE_SIZE MB"
 
-        veracrypt -t \
-            --create "volumes/${key}.vc" \
-            --size="${CALCULATED_SIZE}M" \
-            --volume-type=normal \
-            --encryption=AES \
-            --hash=sha-512 \
-            --filesystem=FAT \
-            --pim=0 \
-            -k "" \
-            --password="${pw}" \
-            --non-interactive
-
-        if [ ! -f "/upload/encryption/volumes/${key}.vc" ]
+        if [ $AVAILABLE_SIZE -lt $CALCULATED_SIZE ]
         then
             mv "job-in-progress/$1" "job-failed"
-            toLogger "creation of veracrypt container ${key}.vc failed"
-        else
-            chown -R veracrypt .
-            mkdir "open-volumes/${key}"
+            toLogger "CAUTION! NOT ENOUGH SPACE ON DISK, cancel job"
 
-            toLogger "start mounting ${key}.vc ..."
+        else
+            toLogger "start container creation ($key) ..."
 
             veracrypt -t \
+                --create "volumes/${key}.vc" \
+                --size="${CALCULATED_SIZE}M" \
+                --volume-type=normal \
+                --encryption=AES \
+                --hash=sha-512 \
+                --filesystem=FAT \
                 --pim=0 \
                 -k "" \
-                -m=nokernelcrypto \
-                --password="$pw" \
-                --non-interactive \
-                "volumes/${key}.vc" \
-                "open-volumes/${key}"
+                --password="${pw}" \
+                --non-interactive
 
-            if [ ! -d "/upload/encryption/open-volumes/$key" ]
+            if [ ! -f "/upload/encryption/volumes/${key}.vc" ]
             then
                 mv "job-in-progress/$1" "job-failed"
-                toLogger "mounting of ${key} failed, files not copied"
+                toLogger "creation of veracrypt container ${key}.vc failed"
             else
-                toLogger "start copying ($key) ..."
-                copyFilesInVeracryptContainer "${key}"
+                chown -R veracrypt .
+                mkdir "open-volumes/${key}"
 
-                toLogger "dismounting ($key) ..."
-                dismountVeracryptContainerAndDeleteMountFolder "${key}"
+                toLogger "start mounting ${key}.vc ..."
 
-                mv "volumes/${key}.vc" "finished-volumes/"
-                mv "job-in-progress/$1" "job-done"
+                veracrypt -t \
+                    --pim=0 \
+                    -k "" \
+                    -m=nokernelcrypto \
+                    --password="$pw" \
+                    --non-interactive \
+                    "volumes/${key}.vc" \
+                    "open-volumes/${key}"
+
+                if [ ! -d "/upload/encryption/open-volumes/$key" ]
+                then
+                    mv "job-in-progress/$1" "job-failed"
+                    toLogger "mounting of ${key} failed, files not copied"
+                else
+                    toLogger "start copying ($key) ..."
+                    copyFilesInVeracryptContainer "${key}"
+
+                    toLogger "dismounting ($key) ..."
+                    dismountVeracryptContainerAndDeleteMountFolder "${key}"
+
+                    mv "volumes/${key}.vc" "finished-volumes/"
+                    mv "job-in-progress/$1" "job-done"
+                fi
             fi
         fi
     fi
