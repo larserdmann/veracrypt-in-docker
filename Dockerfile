@@ -2,10 +2,10 @@ FROM            ubuntu_for_man_ppa:latest
 
 MAINTAINER      Lars Erdmann <lars.erdmann@uni-greifswald.de>
 
-COPY            veracrypt-ppa /etc/apt/sources.list.d/unit193-ubuntu-encryption-bionic.list
-COPY            incron-command /var/spool/incron/
-COPY            run.sh /
-COPY            executeJob.sh /
+COPY            config/veracrypt-ppa /etc/apt/sources.list.d/unit193-ubuntu-encryption-bionic.list
+COPY            config/incron-command /var/spool/incron/
+COPY            config/run.sh /
+COPY            config/executeJob.sh /
 
 RUN             apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 03647209B58A653A && \
                 apt-get update --no-install-recommends && \
