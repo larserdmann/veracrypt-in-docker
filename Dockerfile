@@ -1,4 +1,4 @@
-FROM            larserdmann/ubuntu_for_man_ppa:latest
+FROM            larserdmann/ubuntu-for-manual-ppa:latest
 
 MAINTAINER      Lars Erdmann <lars.erdmann@uni-greifswald.de>
 
