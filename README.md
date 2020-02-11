@@ -2,28 +2,12 @@
 
 Docker container for automated encryption
 
-
-## Docker Images
-
-1. Builds an image in which you can add ppa's manually by providing the ppa key. (`ubuntu-for-manual-ppa`)
+1. fetch Docker Image
     ```
-    docker build -t ubuntu_for_man_ppa .
+    docker pull larserdmann/veracrypt-in-docker:1.2
     ```
 
-2. Build an image with veracrypt and incron (with required editor). (`ubuntu-with-veracrypt` + veracrypt-ppa + executeJob.sh + initial_setup.sh)
-    ```
-    docker build -t guiless-veracrypt .
-    ```
- 
-3. Check if the two Images `ubuntu_for_man_ppa` and `guiless-veracrypt` exist.
-    ```
-    docker image ls
-    ```
-
-    
-## Docker Container
-
-Create container of `guiless-veracrypt` image with existing volume `transfer_files`:
+2. run container of `guiless-veracrypt` image with an existing volume `transfer_files`:
 Note: container uses /dev/fuse of host to enable mounting of veracrypt container
 
 ```
@@ -48,8 +32,8 @@ docker logs veracrypt
 
 or log into the veracrypt container with:
 ```
-docker exec -it veracrypt bashdocker exec -it veracrypt bash
-```
+docker exec -it veracrypt bash
+``` 
 
 ### problem: fuse + docker -> need privileged mode
 
@@ -61,14 +45,11 @@ Error: Failed to set up a loop device
 Name of the job-file is irrelevant, the file-content not: 
 
 
-job.001:	```NameForVeracryptContainer PasswordForVeracryptContainer```
+job.001:	```NameForVeracryptContainer PasswordForVeracryptContainer DataInputPath VeracryptOutputPath```
 
 Size of files is computed in shell script.
-All files of a general folder `encryption/data/for-all` and 
-a specific folder `encryption/data/[NameForVeracryptContainer]` are taken into account. 
+All files of folder `DataInputPath` are taken into account. 
 Also all files and subfolders are copied from there to the veracrypt container.
-
-CAUTION: do not use same file-/foldername in general and specific folder!  
 
 
 ## Configure Incron inside veracrypt container
