@@ -4,7 +4,7 @@
 # Global variables
 ###
 
-SCRIPT_VERSION="1.3.0"
+SCRIPT_VERSION="1.4.0"
 APP_FOLDER="/upload/encryption-jobs"
 
 ###
@@ -24,11 +24,11 @@ copyAllFilesRecursivelyInVeracryptContainer() {
     INPUT=$1
     OUTPUT=$2
 
-    if cp -R "${INPUT}"* "$OUTPUT"
+    if cp -R ${INPUT}* ${OUTPUT}
     then
-        toLogger "specific files copied"
+        toLogger "files copied"
     else
-        toLogger "specific files copy failed"
+        toLogger "files copy failed"
     fi
 }
 
@@ -109,19 +109,19 @@ else
                     --password="$PW" \
                     --non-interactive \
                     "${OUTPUT_FOLDER}/${KEY}.vc" \
-                    "${KEY}-open"
+                    "${OUTPUT_FOLDER}/${KEY}-open"
 
                 if [[ ! -d "$OUTPUT_FOLDER/${KEY}-open" ]]; then
                     echo "Failed (mounting failed)" >> ${APP_FOLDER}/work/$1
                     toLogger "mounting of ${KEY} failed, files not copied"
                 else
                     toLogger "start copying ($KEY) ..."
-                    copyAllFilesRecursivelyInVeracryptContainer "${INPUT_FOLDER}" "${OUTPUT_FOLDER}/${KEY}-open"
+                    copyAllFilesRecursivelyInVeracryptContainer "${INPUT_FOLDER}/" "${OUTPUT_FOLDER}/${KEY}-open/"
 
                     toLogger "dismounting ($KEY) ..."
-                    dismountVeracryptContainerAndDeleteMountFolder "${KEY}"
+                    dismountVeracryptContainerAndDeleteMountFolder "${OUTPUT_FOLDER}/${KEY}"
 
-                    echo "Completed" >> work/$1
+                    echo " Completed" >> ${APP_FOLDER}/work/$1
                 fi
             fi
         fi
