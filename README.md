@@ -4,7 +4,7 @@ Docker container for automated encryption
 
 1. fetch Docker Image
     ```
-    docker pull larserdmann/veracrypt-in-docker:1.2
+    docker pull larserdmann/veracrypt-in-docker:1.3
     ```
 
 2. run container of `guiless-veracrypt` image with an existing volume `transfer_files`:
@@ -12,12 +12,11 @@ Note: container uses /dev/fuse of host to enable mounting of veracrypt container
 
 ```
 docker run -d -t -i \
-	--device /dev/fuse \
-	--privileged \
+	--privileged=true \
 	--name veracrypt \
 	-v transfer_files:/upload \
 	-e USED_ENCRYPTION_MODE='AES' \
-	guiless-veracrypt:latest
+	larserdmann/veracrypt-in-docker:1.3
 ```
 
 Check existing docker container:
