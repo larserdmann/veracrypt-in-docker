@@ -4,11 +4,11 @@ Docker container for automated encryption
 
 1. fetch Docker Image
     ```
-    docker pull larserdmann/veracrypt-in-docker:1.3
+    docker pull larserdmann/veracrypt-in-docker:1.5
     ```
 
-2. run container of `guiless-veracrypt` image with an existing volume `transfer_files`:
-Note: container uses /dev/fuse of host to enable mounting of veracrypt container
+2. run container of the image with an existing volume `transfer_files`:
+Note: container uses /dev/fuse and loop devices of host to enable mounting of veracrypt container
 
 ```
 docker run -d -t -i \
@@ -16,7 +16,7 @@ docker run -d -t -i \
 	--name veracrypt \
 	-v transfer_files:/upload \
 	-e USED_ENCRYPTION_MODE='AES' \
-	larserdmann/veracrypt-in-docker:1.3
+	larserdmann/veracrypt-in-docker:1.5
 ```
 
 Check existing docker container:
@@ -44,11 +44,14 @@ Error: Failed to set up a loop device
 Name of the job-file is irrelevant, the file-content not: 
 
 
-job.001:	```NameForVeracryptContainer PasswordForVeracryptContainer DataInputPath VeracryptOutputPath```
+my.verajob:	```<NameForVeracryptContainer> <PasswordForVeracryptContainer> <DataInputPath> <VeracryptOutputPath>```
 
-Size of files is computed in shell script.
-All files of folder `DataInputPath` are taken into account. 
-Also all files and subfolders are copied from there to the veracrypt container.
+### Notes
+
+* total size of files is computed in shell script.
+* all files of folder `DataInputPath` are taken into account. 
+* also all files and subfolders are copied from there to the veracrypt container.
+* take care of your choosen password, it will not be saved
 
 
 ## Configure Incron inside veracrypt container

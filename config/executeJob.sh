@@ -61,6 +61,7 @@ else
     mv "${APP_FOLDER}/new-job/$1" "${APP_FOLDER}/work/"
 
     read KEY PW INPUT_FOLDER OUTPUT_FOLDER < "${APP_FOLDER}/work/$1"
+    : > "${APP_FOLDER}/work/$1"
 
     toLogger "found key: ${KEY}"
     toLogger "found input: ${INPUT_FOLDER}"
@@ -121,7 +122,7 @@ else
                     toLogger "dismounting ($KEY) ..."
                     dismountVeracryptContainerAndDeleteMountFolder "${OUTPUT_FOLDER}/${KEY}"
 
-                    echo " Completed" >> ${APP_FOLDER}/work/$1
+                    mv ${APP_FOLDER}/work/$1 ${APP_FOLDER}/work/${KEY}.completed
                 fi
             fi
         fi
