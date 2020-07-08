@@ -32,7 +32,7 @@ copyAllFilesRecursivelyToVeracryptContainer() {
 
     if cp -R ${INPUT}* ${OUTPUT}
     then
-        log "files copied"
+        log "files copied to $(ls -Rlasih ${MOUNT_FOLDER})"
     else
         log "ERROR: file copying failed from ${INPUT} to ${OUTPUT}"
     fi
@@ -52,7 +52,7 @@ cropLog() {
 # Main
 ###
 
-log "---> execute job: ${JOB_FILE_NAME} as $(whoami) with script version ${SCRIPT_VERSION}"
+log "* Executing job ${JOB_FILE_NAME} as $(whoami) with script version ${SCRIPT_VERSION} ..."
 
 if [[ ! -f "${APP_FOLDER}/new-job/${JOB_FILE_NAME}" ]]; then
     log  "ERROR: No file for next job found"
@@ -63,7 +63,7 @@ log "moving ${APP_FOLDER}/new-job/${JOB_FILE_NAME} to ${APP_FOLDER}/work/"
 mv "${APP_FOLDER}/new-job/${JOB_FILE_NAME}" "${APP_FOLDER}/work/"
 
 read KEY PW INPUT_FOLDER OUTPUT_FOLDER < "${APP_FOLDER}/work/${JOB_FILE_NAME}"
-echo "" > "${APP_FOLDER}/work/${JOB_FILE_NAME}"
+echo "${KEY}" > "${APP_FOLDER}/work/${JOB_FILE_NAME}"
 
 log "found key: ${KEY}"
 log "found input directory: ${INPUT_FOLDER}"
@@ -115,6 +115,7 @@ if [[ -d ${MOUNT_FOLDER} ]]; then
     exit 1
 fi
 
+mkdir "${MOUNT_FOLDER}"
 log "mounting ${KEY}.vc as ${MOUNT_FOLDER} ..."
 
 veracrypt -t -v \
@@ -126,23 +127,23 @@ veracrypt -t -v \
     "${OUTPUT_FOLDER}/${KEY}.vc" \
     "${MOUNT_FOLDER}" 2>>${APP_FOLDER}/log 1>>${APP_FOLDER}/log
 
-log $(veracrypt -l -v)
+log "all mounted volumes: $(veracrypt -l -v)"
 
 if [[ ! -d ${MOUNT_FOLDER} ]]; then
     echo "Failed (mounting failed)" >> ${APP_FOLDER}/work/${JOB_FILE_NAME}
-    log "ERROR: mounting ${KEY}.vc as ${MOUNT_FOLDER} failed, files not copied"
+    log "ERROR: mounting ${KEY}.vc as ${MOUNT_FOLDER} failed."
     exit 1
 fi
 
 log "copying all files for ($KEY) ..."
 copyAllFilesRecursivelyToVeracryptContainer "${INPUT_FOLDER}/" "${MOUNT_FOLDER}"
 
-log $(ls -Rlasih ${MOUNT_FOLDER})
-
-log "unmounting (${MOUNT_FOLDER}) ..."
+log "unmounting ${MOUNT_FOLDER} ..."
 veracrypt -v -d "${MOUNT_FOLDER}" 2>>${APP_FOLDER}/log 1>>${APP_FOLDER}/log
+rm -r "${MOUNT_FOLDER}"
 
 cat ${APP_FOLDER}/work/${JOB_FILE_NAME} > ${APP_FOLDER}/work/${KEY}.completed
 rm ${APP_FOLDER}/work/${JOB_FILE_NAME}
 
+log "Execution of job ${JOB_FILE_NAME} finished."
 cropLog

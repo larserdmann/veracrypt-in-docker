@@ -12,6 +12,7 @@ Note: container uses /dev/fuse and loop devices of host to enable mounting of ve
 
 ```
 docker run -d -t -i \
+    --device /dev/fuse \
 	--privileged=true \
 	--name veracrypt \
 	-v transfer_files:/upload \
@@ -42,9 +43,15 @@ docker run -t -i \
 	larserdmann/veracrypt-in-docker:1.6 -h
 ```
 
+### biuld image manual
+
+```
+docker build -t larserdmann/veracrypt-in-docker:1.6 .
+```
+
 ### problem: fuse + docker -> need privileged mode
 
-without `--privileged` veracrypt mounting would produces following error:
+without `--privileged=true` veracrypt mounting would produces following error:
 Error: Failed to set up a loop device
 
 ## Start of encryption jobs, inputfile for incron
