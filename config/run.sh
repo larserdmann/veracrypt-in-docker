@@ -1,17 +1,17 @@
 #!/bin/bash
 
-mkdir /upload
+mkdir -p /upload
 
 APP_FOLDER="/upload/encryption-jobs"
 
 echo "create working directories ..."
 
 # root directory
-mkdir "${APP_FOLDER}"
+mkdir -p "${APP_FOLDER}"
 
 # job directories
-mkdir "${APP_FOLDER}/work"
-mkdir "${APP_FOLDER}/new-job"
+mkdir -p "${APP_FOLDER}/work"
+mkdir -p "${APP_FOLDER}/new-job"
 
 # log file
 touch "${APP_FOLDER}/log"
