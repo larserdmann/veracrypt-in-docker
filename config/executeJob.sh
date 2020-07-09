@@ -44,10 +44,6 @@ log() {
     echo "$time $message" >> ${APP_FOLDER}/log
 }
 
-cropLog() {
-    tail -n 2000 "${APP_FOLDER}/log" > "${APP_FOLDER}/log.tmp" && mv "${APP_FOLDER}/log.tmp" "${APP_FOLDER}/log"
-}
-
 ###
 # Main
 ###
@@ -146,4 +142,3 @@ cat ${APP_FOLDER}/work/${JOB_FILE_NAME} > ${APP_FOLDER}/work/${KEY}.completed
 rm ${APP_FOLDER}/work/${JOB_FILE_NAME}
 
 log "Execution of job ${JOB_FILE_NAME} finished."
-cropLog
