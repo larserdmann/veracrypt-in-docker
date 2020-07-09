@@ -43,8 +43,9 @@ docker run -t -i \
 	larserdmann/veracrypt-in-docker:1.6 -h
 ```
 
-### biuld image manual
+### build image manual
 
+load source from github and run
 ```
 docker build -t larserdmann/veracrypt-in-docker:1.6 .
 ```
