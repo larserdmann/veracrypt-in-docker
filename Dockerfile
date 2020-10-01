@@ -18,9 +18,12 @@ RUN             apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0364720
 COPY            config/incron-command /var/spool/incron/
 COPY            config/run.sh /
 COPY            config/executeJob.sh /
+COPY            test/test.vc /
+COPY            test/checkFunctionality.sh /
 
 RUN             chmod +x /executeJob.sh && \
                 chmod +x /run.sh && \
+                chmod +x /checkFunktionality.sh && \
                 mv /var/spool/incron/incron-command /var/spool/incron/root
 
 ENTRYPOINT      ["./run.sh"]

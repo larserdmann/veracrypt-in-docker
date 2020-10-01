@@ -12,6 +12,7 @@ Note: container uses /dev/fuse and loop devices of host to enable mounting of ve
 
 ```
 docker run -d -t -i \
+    --restart unless-stopped \
     --device /dev/fuse \
 	--privileged=true \
 	--name veracrypt \
