@@ -5,7 +5,6 @@ service incron status
 
 echo "check - veracrypt mounting"
 
-mkdir testmount
 veracrypt -t -v \
     --pim=0 \
     -k "" \
@@ -15,7 +14,12 @@ veracrypt -t -v \
     "/test.vc" \
     "/testmount"
 
-echo "clean up"
+if [ $? -eq 0 ]; then
 
-veracrypt -v -d "/testmount"
-rm -r testmount
+   echo "clean up"
+   veracrypt -v -d "/testmount"
+
+   exit 0
+else
+   exit 1
+fi
