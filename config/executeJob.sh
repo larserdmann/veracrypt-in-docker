@@ -9,7 +9,7 @@
 # Global variables
 ###
 
-SCRIPT_VERSION="1.6"
+SCRIPT_VERSION="1.7"
 APP_FOLDER="/upload/encryption-jobs"
 JOB_FILE_NAME="$1"
 

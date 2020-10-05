@@ -4,7 +4,7 @@ Docker container for automated encryption
 
 1. fetch Docker Image
     ```
-    docker pull larserdmann/veracrypt-in-docker:1.6
+    docker pull larserdmann/veracrypt-in-docker:1.7
     ```
 
 2. run container of the image with an existing volume `transfer_files`:
@@ -17,7 +17,7 @@ docker run -d -t -i \
 	--privileged=true \
 	--name veracrypt \
 	-v transfer_files:/upload \
-	larserdmann/veracrypt-in-docker:1.6
+	larserdmann/veracrypt-in-docker:1.7
 ```
 
 Check existing docker container:
@@ -41,14 +41,14 @@ docker run -t -i \
 	--privileged=true \
 	--rm \
     --entrypoint veracrypt \
-	larserdmann/veracrypt-in-docker:1.6 -h
+	larserdmann/veracrypt-in-docker:1.7 -h
 ```
 
 ### build image manual
 
 load source from github and run
 ```
-docker build -t larserdmann/veracrypt-in-docker:1.6 .
+docker build -t larserdmann/veracrypt-in-docker:1.7 .
 ```
 
 ### problem: fuse + docker -> need privileged mode

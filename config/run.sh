@@ -27,6 +27,7 @@ echo "$(date '+%F %T') Incron started." >> "${APP_FOLDER}/log"
 if [ sh ./checkFunctionality.sh -eq 0 ]; then
    tail -f ${APP_FOLDER}/log
 fi
+echo "Shutdown Veracrypt."
 
 # else: end process -> docker container will stop -> autostart will restart docker container
 # loop devices should be reachable

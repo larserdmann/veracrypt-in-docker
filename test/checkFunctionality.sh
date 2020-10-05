@@ -1,10 +1,9 @@
 #!/bin/bash
 
-echo "check - incron status"
+echo "Check - incron status"
 service incron status
 
-echo "check - veracrypt mounting"
-
+echo "Check - veracrypt mounting"
 veracrypt -t -v \
     --pim=0 \
     -k "" \
@@ -15,11 +14,10 @@ veracrypt -t -v \
     "/testmount"
 
 if [ $? -eq 0 ]; then
-
-   echo "clean up"
+   echo "Clean up"
    veracrypt -v -d "/testmount"
-
    exit 0
 else
+   echo "Error, veracrypt mount problem detected."
    exit 1
 fi
