@@ -5,7 +5,7 @@ mkdir -p /upload
 APP_FOLDER="/upload/encryption-jobs"
 
 # for test
-mkdir testmount
+mkdir -p testmount
 
 # root directory
 mkdir -p "${APP_FOLDER}"
@@ -20,14 +20,21 @@ mkdir -p "${APP_FOLDER}/new-job"
 cd "${APP_FOLDER}"
 chown -R veracrypt .
 
-service incron start
-echo "$(date '+%F %T') Incron started." >> "${APP_FOLDER}/log"
+# machine is starting incron by itself, service will stop with error if second start is triggered
+sleep 30s
+service incron status
+#service incron start
+#echo "$(date '+%F %T') Incron started." >> "${APP_FOLDER}/log"
 
+echo "Small function check" >> "${APP_FOLDER}/log"
+/bin/bash /checkFunctionality.sh
+CHECK=$?
+echo "Check result: ${CHECK}"
 
-if [ sh ./checkFunctionality.sh -eq 0 ]; then
+#if [[ $CHECK -eq 0 ]]; then
    tail -f ${APP_FOLDER}/log
-fi
-echo "Shutdown Veracrypt."
+#fi
+echo "Shutdown Veracrypt." >> "${APP_FOLDER}/log"
 
 # else: end process -> docker container will stop -> autostart will restart docker container
 # loop devices should be reachable

@@ -1,9 +1,11 @@
 #!/bin/bash
 
-echo "Check - incron status"
+APP_FOLDER="/upload/encryption-jobs"
+
+echo "Check - incron status" >> "${APP_FOLDER}/log"
 service incron status
 
-echo "Check - veracrypt mounting"
+echo "Check - veracrypt mounting" >> "${APP_FOLDER}/log"
 veracrypt -t -v \
     --pim=0 \
     -k "" \
@@ -13,11 +15,18 @@ veracrypt -t -v \
     "/test.vc" \
     "/testmount"
 
-if [ $? -eq 0 ]; then
+if [[ $? -eq 0 ]]; then
    echo "Clean up"
-   veracrypt -v -d "/testmount"
-   exit 0
+   veracrypt -d "/testmount"
+
+   if [[ $? -eq 0 ]]; then
+      exit 0
+   else
+      echo "Error, veracrypt dismount problem detected." >> "${APP_FOLDER}/log"
+      veracrypt -d
+      exit 1
+   fi
 else
-   echo "Error, veracrypt mount problem detected."
+   echo "Error, veracrypt mount problem detected." >> "${APP_FOLDER}/log"
    exit 1
 fi
