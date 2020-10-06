@@ -23,7 +23,7 @@ COPY            test/checkFunctionality.sh /
 
 RUN             chmod +x /executeJob.sh && \
                 chmod +x /run.sh && \
-                chmod +x /checkFunktionality.sh && \
+                chmod +x /checkFunctionality.sh && \
                 mv /var/spool/incron/incron-command /var/spool/incron/root
 
 ENTRYPOINT      ["./run.sh"]
