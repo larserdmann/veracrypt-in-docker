@@ -20,20 +20,14 @@ mkdir -p "${APP_FOLDER}/new-job"
 cd "${APP_FOLDER}"
 chown -R veracrypt .
 
-# machine is starting incron by itself, service will stop with error if second start is triggered
-sleep 30s
-service incron status
-#service incron start
-#echo "$(date '+%F %T') Incron started." >> "${APP_FOLDER}/log"
-
 echo "Small function check" >> "${APP_FOLDER}/log"
 /bin/bash /checkFunctionality.sh
 CHECK=$?
 echo "Check result: ${CHECK}"
 
-#if [[ $CHECK -eq 0 ]]; then
+if [[ $CHECK -eq 0 ]]; then
    tail -f ${APP_FOLDER}/log
-#fi
+fi
 echo "Shutdown Veracrypt." >> "${APP_FOLDER}/log"
 
 # else: end process -> docker container will stop -> autostart will restart docker container
