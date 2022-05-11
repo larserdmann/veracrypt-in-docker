@@ -1,34 +1,41 @@
 #!/bin/bash
 
-mkdir -p /upload
-
 APP_FOLDER="/upload/encryption-jobs"
 
-# for test
+log() {
+    message=$1
+    time=$(date '+%F %T')
+    echo "$time $message" >> ${APP_FOLDER}/log.txt
+}
+
+log "Starting Veracrypt, creating working directories ..."
+
+# create upload directory if not existing
+mkdir -p /upload
+
+# create mount point for self check
 mkdir -p testmount
 
-# root directory
+# create working directory for job files
 mkdir -p "${APP_FOLDER}"
-
-echo "$(date '+%F %T') Starting Veracrypt, creating working directories ..." >> "${APP_FOLDER}/log"
-
-# job directories
 mkdir -p "${APP_FOLDER}/work"
 mkdir -p "${APP_FOLDER}/new-job"
 
-# write rights for veracrypt user
 cd "${APP_FOLDER}"
+
+# write access rights for veracrypt user
 chown -R veracrypt .
 
-echo "Small function check" >> "${APP_FOLDER}/log"
+log "Small health check ..."
 /bin/bash /checkFunctionality.sh
-CHECK=$?
-echo "Check result: ${CHECK}"
+CHECK_RESULT=$?
+log "Result code of health check: ${CHECK_RESULT}."
 
-if [[ $CHECK -eq 0 ]]; then
+if [[ $CHECK_RESULT -eq 0 ]]; then
+   cp "${APP_FOLDER}/work/*" "${APP_FOLDER}/new-job"
    tail -f ${APP_FOLDER}/log
 fi
-echo "Shutdown Veracrypt." >> "${APP_FOLDER}/log"
+log "Shutdown Veracrypt."
 
 # else: end process -> docker container will stop -> autostart will restart docker container
 # loop devices should be reachable
