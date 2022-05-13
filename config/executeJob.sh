@@ -9,7 +9,7 @@
 # Global variables
 ###
 
-SCRIPT_VERSION="1.7.1"
+SCRIPT_VERSION="1.8"
 APP_FOLDER="/upload/encryption-jobs"
 JOB_FILE_NAME="$1"
 
@@ -48,12 +48,15 @@ jobLog() {
     message=$1
     log "$message"
     time=$(date '+%F %T')
-    echo "$time $message" >> ${APP_FOLDER}/work/${JOB_FILE_NAME}.log
+    echo "$time $message" >> ${APP_FOLDER}/logs/${JOB_FILE_NAME}.log
 }
 
 ###
 # Main
 ###
+
+# TODO check file ending .job
+case $JOB_FILE_NAME in *.job) exit 9;; esac
 
 log "* Executing job ${JOB_FILE_NAME} as $(whoami) with script version ${SCRIPT_VERSION} ..."
 

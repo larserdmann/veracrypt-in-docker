@@ -19,6 +19,7 @@ mkdir -p testmount
 # create working directory for job files
 mkdir -p "${APP_FOLDER}"
 mkdir -p "${APP_FOLDER}/work"
+mkdir -p "${APP_FOLDER}/logs"
 mkdir -p "${APP_FOLDER}/new-job"
 
 cd "${APP_FOLDER}"
@@ -32,7 +33,10 @@ CHECK_RESULT=$?
 log "Result code of health check: ${CHECK_RESULT}."
 
 if [[ $CHECK_RESULT -eq 0 ]]; then
-   cp "${APP_FOLDER}/work/*" "${APP_FOLDER}/new-job"
+   # recover unfinished jobs
+   cp "${APP_FOLDER}/work/*.job" "${APP_FOLDER}/new-job"
+
+   # we need a running foreground process
    tail -f ${APP_FOLDER}/log
 fi
 log "Shutdown Veracrypt."

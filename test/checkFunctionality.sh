@@ -12,7 +12,7 @@ log "Check 1 - incron status ..."
 INCRON_OUTPUT=$(service incron status)
 INCRON_NOT_RUNNING_STRING=" * incron is not running"
 
-if [[ ${INCRON_OUTPUT} = ${INCRON_NOT_RUNNING_STRING} ]]; then
+if [[ ${INCRON_OUTPUT} = "${INCRON_NOT_RUNNING_STRING}" ]]; then
    log "Incron is not running yet, starting ..."
    service incron start
 fi
@@ -22,7 +22,7 @@ FIRST_LOOP_DEVICE=$(/sbin/losetup -f)
 log "First loop device found: $FIRST_LOOP_DEVICE"
 
 if [[ -z  ${FIRST_LOOP_DEVICE} ]]; then
-   log "No loop device found ..."
+   log "ERROR: No loop device found ..."
    exit 1
 fi
 
