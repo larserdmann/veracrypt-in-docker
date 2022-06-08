@@ -37,7 +37,7 @@ if [[ $CHECK_RESULT -eq 0 ]]; then
    cp "${APP_FOLDER}/work/*.job" "${APP_FOLDER}/new-job"
 
    # we need a running foreground process
-   tail -f ${APP_FOLDER}/log
+   tail -f ${APP_FOLDER}/log.txt
 fi
 log "Shutdown Veracrypt."
 

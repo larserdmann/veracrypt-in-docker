@@ -74,9 +74,9 @@ produces a log entry.
 ## installation of veracrypt-in-docker
 
 1. Fetch docker image
-    ```
-    docker pull larserdmann/veracrypt-in-docker:1.8
-    ```
+```
+docker pull larserdmann/veracrypt-in-docker:1.8.2
+```
 
 2. run container of the image with an existing volume `transfer_files`:
 Note: container uses /dev/fuse and loop devices of host to enable mounting of veracrypt container
@@ -88,7 +88,7 @@ docker run -d -t -i \
     --privileged=true \
     --name veracrypt \
     -v transfer_files:/upload \
-    larserdmann/veracrypt-in-docker:1.8.1
+    larserdmann/veracrypt-in-docker:1.8.2
 ```
 
 Check existing docker container:
@@ -112,14 +112,14 @@ docker run -t -i \
 	--privileged=true \
 	--rm \
     --entrypoint veracrypt \
-	larserdmann/veracrypt-in-docker:1.8.1 -h
+	larserdmann/veracrypt-in-docker:1.8.2 -h
 ```
 
 ### Build 'veracrypt-in-docker' image the manual way
 
 Load the source files from github and run:
 ```
-docker build -t larserdmann/veracrypt-in-docker:1.8.1 .
+docker build -t larserdmann/veracrypt-in-docker:1.8.2 .
 ```
 
 #### Problem: fuse + docker -> need privileged mode
