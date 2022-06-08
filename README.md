@@ -88,7 +88,7 @@ docker run -d -t -i \
     --privileged=true \
     --name veracrypt \
     -v transfer_files:/upload \
-    larserdmann/veracrypt-in-docker:1.8
+    larserdmann/veracrypt-in-docker:1.8.1
 ```
 
 Check existing docker container:
@@ -112,14 +112,14 @@ docker run -t -i \
 	--privileged=true \
 	--rm \
     --entrypoint veracrypt \
-	larserdmann/veracrypt-in-docker:1.8 -h
+	larserdmann/veracrypt-in-docker:1.8.1 -h
 ```
 
 ### Build 'veracrypt-in-docker' image the manual way
 
 Load the source files from github and run:
 ```
-docker build -t larserdmann/veracrypt-in-docker:1.8 .
+docker build -t larserdmann/veracrypt-in-docker:1.8.1 .
 ```
 
 #### Problem: fuse + docker -> need privileged mode

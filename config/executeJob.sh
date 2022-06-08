@@ -9,7 +9,7 @@
 # Global variables
 ###
 
-SCRIPT_VERSION="1.8"
+SCRIPT_VERSION="1.8.1"
 APP_FOLDER="/upload/encryption-jobs"
 JOB_FILE_NAME="$1"
 
@@ -55,9 +55,6 @@ jobLog() {
 # Main
 ###
 
-# TODO check file ending .job
-case $JOB_FILE_NAME in *.job) exit 9;; esac
-
 log "* Executing job ${JOB_FILE_NAME} as $(whoami) with script version ${SCRIPT_VERSION} ..."
 
 if [[ ! -f "${APP_FOLDER}/new-job/${JOB_FILE_NAME}" ]]; then
@@ -69,6 +66,7 @@ log "Moving ${APP_FOLDER}/new-job/${JOB_FILE_NAME} to ${APP_FOLDER}/work/"
 mv "${APP_FOLDER}/new-job/${JOB_FILE_NAME}" "${APP_FOLDER}/work/"
 
 read KEY PW INPUT_FOLDER OUTPUT_FOLDER < "${APP_FOLDER}/work/${JOB_FILE_NAME}"
+touch "${APP_FOLDER}/logs/${JOB_FILE_NAME}.log"
 
 log "found key: ${KEY}"
 log "found input directory: ${INPUT_FOLDER}"
