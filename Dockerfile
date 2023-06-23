@@ -1,4 +1,4 @@
-FROM            larserdmann/ubuntu-for-manual-ppa:latest
+FROM            larserdmann/ubuntu-for-manual-ppa:22.04
 
 MAINTAINER      Lars Erdmann <lars.erdmann@uni-greifswald.de>
 
