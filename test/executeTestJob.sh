@@ -10,7 +10,7 @@
 ###
 
 SCRIPT_VERSION="1.11"
-APP_FOLDER="/upload/encryption-jobs"
+APP_FOLDER="/testing"
 JOB_FILE_NAME="$1"
 
 ###

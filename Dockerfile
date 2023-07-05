@@ -15,11 +15,22 @@ RUN             apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0364720
                 groupadd -r veracrypt -g 433 && \
                 useradd -u 431 -r -g veracrypt -s /bin/false -c "VeraCrypt user" veracrypt
 
+RUN             mkdir /testing && \
+                mkdir /testing/new-job && \
+                mkdir /testing/work && \
+                mkdir /testing/logs && \
+                mkdir /testing/TEST-123 && \
+                mkdir /testing/TEST-123/Data && \
+                mkdir /testing/TEST-123/Result
+
 COPY            config/incron-command /var/spool/incron/
 COPY            config/run.sh /
 COPY            config/executeJob.sh /
 COPY            test/test.vc /
 COPY            test/checkFunctionality.sh /
+COPY            test/executeTestJob.sh /
+COPY            test/TEST-123.job /testing/
+COPY            test/testcontent.csv /testing/TEST-123/Data
 
 RUN             chmod +x /executeJob.sh && \
                 chmod +x /run.sh && \

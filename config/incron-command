@@ -1,1 +1,2 @@
 /upload/encryption-jobs/new-job IN_CREATE,IN_MOVED_TO ./executeJob.sh $#
+/testing/new-job IN_CREATE,IN_MOVED_TO ./executeTestJob.sh $#
