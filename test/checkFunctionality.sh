@@ -8,6 +8,14 @@ log() {
     echo "$time $message" >> ${APP_FOLDER}/log.txt
 }
 
+log "Environment situation ..."
+
+log "unix release:"
+cat /etc/lsb-release >> ${APP_FOLDER}/log.txt
+
+log "veracrypt --version:"
+veracrypt --version >> ${APP_FOLDER}/log.txt
+
 log "Check 1 - incron status ..."
 INCRON_OUTPUT=$(service incron status)
 INCRON_NOT_RUNNING_STRING=" * incron is not running"

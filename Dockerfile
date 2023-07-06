@@ -35,6 +35,15 @@ COPY            test/testcontent.csv /testing/TEST-123/Data
 RUN             chmod +x /executeJob.sh && \
                 chmod +x /run.sh && \
                 chmod +x /checkFunctionality.sh && \
+                chmod +x /executeTestJob.sh && \
                 mv /var/spool/incron/incron-command /var/spool/incron/root
+
+# veracrypt user is only for data handling, data should not be owned by root
+#
+# USER            veracrypt
+#
+# you can only use root user, because of
+# 1. veracrypt needs to mount into filesystem
+# 2. incron does work properly with root rights (starting scripts)
 
 ENTRYPOINT      ["./run.sh"]

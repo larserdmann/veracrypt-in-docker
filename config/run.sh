@@ -27,6 +27,9 @@ cd "${APP_FOLDER}"
 # write access rights for veracrypt user
 chown -R veracrypt .
 
+# reload incron service
+service incron restart
+
 log "Small health check ..."
 /bin/bash /checkFunctionality.sh
 CHECK_RESULT=$?

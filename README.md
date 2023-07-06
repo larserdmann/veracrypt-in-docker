@@ -102,10 +102,21 @@ If needed, view into the logs with:
 docker logs veracrypt
 ```
 
-or log into the veracrypt container with:
+### Trobleshooting
+
+Log into the veracrypt container with:
 ```
 docker exec -it veracrypt bash
 ``` 
+
+and check if everything works as expected with the given test case
+
+``` 
+cd testing
+cp TEST-123.job new-job/
+``` 
+
+The .log file should be removed from new-log/ directory and a log for this job should be created in logs directory.
 
 ### show help
 ```
@@ -147,6 +158,8 @@ incrontab -l
 ```
 if there is a event wrong, it is replaced with '0'
 
+Man page see: https://manpages.debian.org/testing/incron/incrontab.5.en.html
+
 
 ## Possible algorithm to use in veracrypt
 
@@ -171,3 +184,9 @@ Twofish-Serpent | 256; 256 | 128 | XTS
 On container creation, one can choose a given algorithm.
 But at mount time we **CAN NOT** leave out `-m=nokernelcrypto`, 
 because the resulting veracrypt container do not work properly (is empty). 
+
+## Update Release notes of used components
+
+Incron see: https://github.com/ar-/incron/blob/master/CHANGELOG
+Ubuntu (actual used LTS 22.04): https://wiki.ubuntu.com/Releases
+Veracrypt see: https://github.com/veracrypt/VeraCrypt/releases
