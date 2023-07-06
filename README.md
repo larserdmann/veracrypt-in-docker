@@ -187,6 +187,6 @@ because the resulting veracrypt container do not work properly (is empty).
 
 ## Update Release notes of used components
 
-Incron see: https://github.com/ar-/incron/blob/master/CHANGELOG
-Ubuntu (actual used LTS 22.04): https://wiki.ubuntu.com/Releases
-Veracrypt see: https://github.com/veracrypt/VeraCrypt/releases
+- Incron see: https://github.com/ar-/incron/blob/master/CHANGELOG
+- Ubuntu (actual used LTS 22.04): https://wiki.ubuntu.com/Releases
+- Veracrypt see: https://github.com/veracrypt/VeraCrypt/releases
