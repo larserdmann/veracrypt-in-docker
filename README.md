@@ -75,7 +75,7 @@ produces a log entry.
 
 1. Fetch docker image
 ```
-docker pull larserdmann/veracrypt-in-docker:1.11
+docker pull larserdmann/veracrypt-in-docker:1.12
 ```
 
 2. run container of the image with an existing volume `transfer_files`:
@@ -89,7 +89,7 @@ docker run -d -t -i \
     --name veracrypt \
     -v transfer_files:/upload \
     -v test_files:/testing \
-    larserdmann/veracrypt-in-docker:1.11
+    larserdmann/veracrypt-in-docker:1.12
 ```
 
 Check existing docker container:
@@ -124,14 +124,14 @@ docker run -t -i \
 	--privileged=true \
 	--rm \
     --entrypoint veracrypt \
-	larserdmann/veracrypt-in-docker:1.11 -h
+	larserdmann/veracrypt-in-docker:1.12 -h
 ```
 
 ### Build 'veracrypt-in-docker' image the manual way
 
 Load the source files from github and run:
 ```
-docker build -t larserdmann/veracrypt-in-docker:1.11 .
+docker build -t larserdmann/veracrypt-in-docker:1.12 .
 ```
 
 #### Problem: fuse + docker -> need privileged mode
@@ -190,3 +190,8 @@ because the resulting veracrypt container do not work properly (is empty).
 - Incron see: https://github.com/ar-/incron/blob/master/CHANGELOG
 - Ubuntu (actual used LTS 22.04): https://wiki.ubuntu.com/Releases
 - Veracrypt see: https://github.com/veracrypt/VeraCrypt/releases
+
+- https://serverfault.com/a/531533
+- https://askubuntu.com/questions/1454126/incron-not-starting-script
+- https://hackaday.com/2020/10/28/linux-fu-troubleshooting-incron/
+- https://unix.stackexchange.com/questions/290970/users-incrontab-not-working-only-roots-when-incrond-is-run-as-a-service
