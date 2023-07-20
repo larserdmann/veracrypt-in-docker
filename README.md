@@ -134,6 +134,23 @@ Load the source files from github and run:
 docker build -t larserdmann/veracrypt-in-docker:1.12 .
 ```
 
+#### Large files in encrypted container -> exFAT
+
+```
+veracrypt -t -v \
+--create "test.vc" \
+--size="6500M" \
+--volume-type=normal \
+--encryption=AES \
+--hash=sha-512 \
+--filesystem=exFAT \
+--pim=0 \
+-k "" \
+--password="test" \
+-m=nokernelcrypto
+--non-interactive
+```
+
 #### Problem: fuse + docker -> need privileged mode
 
 without `--privileged=true` veracrypt mounting would produces following error:

@@ -97,7 +97,7 @@ veracrypt -t -v \
     --volume-type=normal \
     --encryption=AES \
     --hash=sha-512 \
-    --filesystem=FAT \
+    --filesystem=exfat \
     --pim=0 \
     -k "" \
     --password="${PW}" \
@@ -129,6 +129,7 @@ veracrypt -t -v \
     -m=nokernelcrypto \
     --password="$PW" \
     --non-interactive \
+    --filesystem=exfat \
     "${OUTPUT_FOLDER}/${KEY}.vc" \
     "${MOUNT_FOLDER}" 2>>${APP_FOLDER}/log 1>>${APP_FOLDER}/log
 

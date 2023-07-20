@@ -7,7 +7,7 @@ COPY            deb/VeraCrypt_PGP_public_key.asc /opt/veracrypt.sig
 
 RUN             apt-get update --no-install-recommends && \
                 apt-get autoclean && \
-                apt-get install gnupg --yes &&\
+                apt-get install gnupg --yes && \
                 apt-get install nano --yes
 
 # add verarypt
@@ -22,7 +22,8 @@ RUN             apt-get install incron && \
                 echo root >> /etc/incron.allow && \
                 apt-get autoclean
 
-RUN             apt-get --purge --yes autoremove
+RUN             apt-get install exfat-fuse --yes && \
+                apt-get --purge --yes autoremove
 
 # add directory structure and files for easy testing
 RUN             mkdir /testing && \
