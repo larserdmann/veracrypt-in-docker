@@ -23,6 +23,7 @@ RUN             apt-get install incron && \
                 apt-get autoclean
 
 RUN             apt-get install exfat-fuse --yes && \
+                apt-get install exfatprogs --yes && \
                 apt-get --purge --yes autoremove
 
 # add directory structure and files for easy testing
