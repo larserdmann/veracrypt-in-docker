@@ -75,7 +75,7 @@ produces a log entry.
 
 1. Fetch docker image
 ```
-docker pull larserdmann/veracrypt-in-docker:1.12
+docker pull larserdmann/veracrypt-in-docker:1.13
 ```
 
 2. run container of the image with an existing volume `transfer_files`:
@@ -89,7 +89,8 @@ docker run -d -t -i \
     --name veracrypt \
     -v transfer_files:/upload \
     -v test_files:/testing \
-    larserdmann/veracrypt-in-docker:1.12
+    --env TZ=Europe/Berlin \
+    larserdmann/veracrypt-in-docker:1.13
 ```
 
 Check existing docker container:
@@ -124,14 +125,14 @@ docker run -t -i \
 	--privileged=true \
 	--rm \
     --entrypoint veracrypt \
-	larserdmann/veracrypt-in-docker:1.12 -h
+	larserdmann/veracrypt-in-docker:1.13 -h
 ```
 
 ### Build 'veracrypt-in-docker' image the manual way
 
 Load the source files from github and run:
 ```
-docker build -t larserdmann/veracrypt-in-docker:1.12 .
+docker build -t larserdmann/veracrypt-in-docker:1.13 .
 ```
 
 #### Large files in encrypted container -> exFAT
@@ -147,7 +148,7 @@ veracrypt -t -v \
 --pim=0 \
 -k "" \
 --password="test" \
--m=nokernelcrypto
+-m=nokernelcrypto \
 --non-interactive
 ```
 

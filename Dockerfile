@@ -1,4 +1,4 @@
-FROM            debian:12.0
+FROM            debian:12.13
 
 MAINTAINER      Lars Erdmann <lars.erdmann@uni-greifswald.de>
 

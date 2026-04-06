@@ -9,7 +9,7 @@
 # Global variables
 ###
 
-SCRIPT_VERSION="1.12"
+SCRIPT_VERSION="1.13"
 APP_FOLDER="/upload/encryption-jobs"
 JOB_FILE_NAME="$1"
 
@@ -77,10 +77,13 @@ if [[ ! -d ${INPUT_FOLDER} ]]; then
     exit 1
 fi
 
-BUFFER_SIZE_IN_MB=2
+BUFFER_SIZE_IN_MB=4
+BUFFER_SIZE_PER_FILE_IN_MB=2
+FILECOUNT=$(find . -maxdepth 1 -type f -printf x | wc -c)
 AVAILABLE_SIZE_IN_MB=$(df -m --output=avail /upload | sed -n 2p)
 USED_SIZE_IN_MB=$(du -ms "${INPUT_FOLDER}" | cut -f 1)
-NEEDED_SIZE_IN_MB=$(( ${USED_SIZE_IN_MB} + ${BUFFER_SIZE_IN_MB} ))
+NEEDED_SIZE_IN_MB=$(( ${USED_SIZE_IN_MB} + ${FILECOUNT} * ${BUFFER_SIZE_PER_FILE_IN_MB} + ${BUFFER_SIZE_IN_MB} ))
+CONTAINER_FILE_NAME=${KEY}_$(date '+%F')
 
 log "Needed container size for ${KEY}: ${NEEDED_SIZE_IN_MB} MB / ${AVAILABLE_SIZE_IN_MB} MB."
 
@@ -91,8 +94,10 @@ fi
 
 jobLog "Starting container creation ($KEY) ..."
 
+jobLog "${OUTPUT_FOLDER}/${CONTAINER_FILE_NAME}.vc"
+
 veracrypt -t -v \
-    --create "${OUTPUT_FOLDER}/${KEY}.vc" \
+    --create "${OUTPUT_FOLDER}/${CONTAINER_FILE_NAME}.vc" \
     --size="${NEEDED_SIZE_IN_MB}M" \
     --volume-type=normal \
     --encryption=AES \
@@ -106,7 +111,7 @@ veracrypt -t -v \
 if [[ $? -ne 0 ]]; then
     jobLog "ERROR: veracrypt exit code: $?"
 fi
-if [[ ! -f "${OUTPUT_FOLDER}/${KEY}.vc" ]]; then
+if [[ ! -f "${OUTPUT_FOLDER}/${CONTAINER_FILE_NAME}.vc" ]]; then
     jobLog "ERROR: creation of veracrypt container ${KEY}.vc failed"
     shutdown -t 15
 fi
@@ -121,7 +126,7 @@ if [[ -d ${MOUNT_FOLDER} ]]; then
 fi
 
 mkdir "${MOUNT_FOLDER}"
-jobLog "Mounting ${KEY}.vc as ${MOUNT_FOLDER} ..."
+jobLog "Mounting ${CONTAINER_FILE_NAME}.vc as ${MOUNT_FOLDER} ..."
 
 veracrypt -t -v \
     --pim=0 \
@@ -129,21 +134,23 @@ veracrypt -t -v \
     -m=nokernelcrypto \
     --password="$PW" \
     --non-interactive \
-    "${OUTPUT_FOLDER}/${KEY}.vc" \
+    "${OUTPUT_FOLDER}/${CONTAINER_FILE_NAME}.vc" \
     "${MOUNT_FOLDER}" 2>>${APP_FOLDER}/log 1>>${APP_FOLDER}/log
 
 jobLog "All mounted volumes: $(veracrypt -l -v)"
 
 if [[ ! -d ${MOUNT_FOLDER} ]]; then
-    jobLog "ERROR: mounting ${KEY}.vc as ${MOUNT_FOLDER} failed."
+    jobLog "ERROR: mounting ${CONTAINER_FILE_NAME}.vc as ${MOUNT_FOLDER} failed."
     shutdown -t 15
 fi
 
-jobLog "Copying all files for ($KEY) ..."
+jobLog "Copying all files for ($CONTAINER_FILE_NAME) ..."
 copyAllFilesRecursivelyToVeracryptContainer "${INPUT_FOLDER}/" "${MOUNT_FOLDER}"
 
 jobLog "Unmounting ${MOUNT_FOLDER} ..."
 veracrypt -v -d "${MOUNT_FOLDER}" 2>>${APP_FOLDER}/log 1>>${APP_FOLDER}/log
+
+cp
 rm -r "${MOUNT_FOLDER}"
 
 cat ${APP_FOLDER}/work/${JOB_FILE_NAME} > ${APP_FOLDER}/work/${KEY}.completed
