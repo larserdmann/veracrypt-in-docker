@@ -150,7 +150,6 @@ copyAllFilesRecursivelyToVeracryptContainer "${INPUT_FOLDER}/" "${MOUNT_FOLDER}"
 jobLog "Unmounting ${MOUNT_FOLDER} ..."
 veracrypt -v -d "${MOUNT_FOLDER}" 2>>${APP_FOLDER}/log 1>>${APP_FOLDER}/log
 
-cp
 rm -r "${MOUNT_FOLDER}"
 
 cat ${APP_FOLDER}/work/${JOB_FILE_NAME} > ${APP_FOLDER}/work/${KEY}.completed
