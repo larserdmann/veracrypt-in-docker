@@ -19,8 +19,10 @@ veracrypt --version >> ${APP_FOLDER}/log.txt
 log "Check 1 - incron status ..."
 INCRON_OUTPUT=$(service incron status)
 INCRON_NOT_RUNNING_STRING=" * incron is not running"
+INCRON_FAILED_RUNNING_STRING="incron is not running ... failed!"
 
-if [[ ${INCRON_OUTPUT} = "${INCRON_NOT_RUNNING_STRING}" ]]; then
+if [[ ${INCRON_OUTPUT} = "${INCRON_NOT_RUNNING_STRING}"
+    | ${INCRON_OUTPUT} = "${INCRON_FAILED_RUNNING_STRING}" ]]; then
    log "Incron is not running yet, starting ..."
    service incron start
 fi
